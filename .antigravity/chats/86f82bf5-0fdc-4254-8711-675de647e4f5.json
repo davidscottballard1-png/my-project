@@ -148,6 +148,18 @@
       "created_at": "2026-11-07T21:07:01.040Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "cf53f2d4-2158-4403-9781-8caa52d3dde7",
+      "role": "user",
+      "content": "First I only wanted to use things on file at Amazon. The only issue is that Amazon won’t let you buy it for me with my stored information?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:09:27.863Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
