@@ -160,6 +160,18 @@
       "created_at": "2026-11-07T21:09:27.863Z",
       "sender": "ios",
       "is_cancelled": false
+    },
+    {
+      "id": "c3ff9097-2a40-4577-986a-513f3cfe1720",
+      "role": "agent",
+      "content": "**Yes, exactly.** That is the single roadblock.\n\nHere is why:\n1. **Your stored cards and addresses are walled off**: Amazon does not provide any official way (like \"Sign in with Amazon\") for an outside app to view your saved addresses, view your stored payment methods, or press the final **\"Place your order\"** button on your behalf.\n2. **Fraud & Bot Protection**: If an outside app tries to control a browser in the background to log into your account and check out using your stored info, Amazon's security flags it as an unauthorized bot, throws up security challenges, and can lock your account to protect your wallet.\n\n### Where the handoff happens:\nAn app we build can do **90% of the work** (finding the best item, verifying Prime/fast shipping, and sending the exact item straight into your Amazon iPhone app's cart), and then your **Amazon app** handles that final **10%**—where you tap your stored address/card and swipe **Buy Now** yourself.",
+      "status": "completed",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "cf53f2d4-2158-4403-9781-8caa52d3dde7",
+      "created_at": "2026-11-07T21:09:48.438Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
