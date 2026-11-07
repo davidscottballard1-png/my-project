@@ -64,6 +64,18 @@
       "created_at": "2026-11-07T22:33:13.567Z",
       "sender": "ios",
       "is_cancelled": false
+    },
+    {
+      "id": "4a4a2e96-c116-4f92-be41-ca424223bf7d",
+      "role": "agent",
+      "content": "Looking at your screenshot, **4 different things** were getting cut off—I just fixed all of them:\n\n👉 **[Open Fixed SubSniper App](https://antigravity.luch.dev/site/902266ae-5270-49fd-98c7-3a89a30dbf49/df7ae08c9d7c26fe5e8a39fa/)**\n\n---\n\n### Why They Were Cut Off & What Was Fixed\n\n1. **Scanned iOS Names Cut Off at the Beginning (`0 AppleCare One`, `one Premier`, `®) Pro Monthly`)**:\n   - **Why it happened:**\n     - **Apple One (`one Premier`):** In iOS Settings, Apple writes **Apple One** using the Apple logo symbol (`One`), which the OCR engine couldn't read as letters—so it dropped `` and left `one Premier`.\n     - **App Icons (`0 ` and `®)`):** The OCR scanner tried to read the square app icons on the left edge of your screenshot as text (`0` and `®)`).\n     - **`Pro Monthly`:** In iOS Settings, the app name sits *2 lines above* the `$14.99/month` price, with the plan subtitle (`Pro Monthly`) in between. The scanner stopped at `Pro Monthly` instead of looking one line higher for the app name.\n   - **Fix ([`cleanScannedName`](file:///home/agent/workspace/app.js#L172-L185) & [`parseSubscriptionText`](file:///home/agent/workspace/app.js#L377-L465)):** The scanner now strips icon symbols (`0 `, `®)`), restores `One` to `Apple One Premier`, and looks above plan subtitles (`Pro Monthly`, `Premier`) to grab the real app name. It also **auto-repairs the items already saved on your phone** ([`sanitizeSubscriptionList`](file:///home/agent/workspace/app.js#L187-L199)) as soon as you reload.\n\n2. **Subscription Titles Cut Off with `...` (`YouTube Pre...`)**:\n   - **Why it happened:** Each card forced the subscription name, the `▶️ Google Play` badge, and the `TRIAL` badge onto a single cramped line next to the price.\n   - **Fix ([`renderDashboard`](file:///home/agent/workspace/app.js#L690-L712) & [styles.css](file:///home/agent/workspace/styles.css#L508-L542)):** Moved the source and `TRIAL` badges onto the second row next to the renewal date so the subscription name gets the full width of the card.\n\n3. **`💳 Capital One` Filter Button Cut Off on the Right Edge**:\n   - **Why it happened:** The 4 filter buttons were slightly wider than the iPhone screen width.\n   - **Fix ([index.html](file:///home/agent/workspace/index.html#L115-L121) & [styles.css](file:///home/agent/workspace/styles.css#L435-L456)):** Shortened `\"All Subscriptions\"` to `\"All\"` and made all 4 filter pills flex equally across the screen so none of them clip off the right side.\n\n4. **Top Content Sliding Under the Dynamic Island / Clock (`5:32`)**:\n   - **Why it happened:** Scrolling pushed buttons directly behind the iOS status bar and Dynamic Island.\n   - **Fix ([styles.css](file:///home/agent/workspace/styles.css#L19-L34)):** Added a blurred top status-bar shield (`.ios-status-shield`) and increased top/bottom safe-area spacing.",
+      "status": "completed",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "7afdae37-41c3-4450-86a2-40606ad73c9d",
+      "created_at": "2026-11-07T22:38:25.893Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
