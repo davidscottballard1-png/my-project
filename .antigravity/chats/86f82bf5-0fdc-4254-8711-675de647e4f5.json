@@ -532,6 +532,30 @@
       "created_at": "2026-11-07T21:58:15.226Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "2d4618a9-d186-43c3-9d24-bfe36f0ab0df",
+      "role": "user",
+      "content": "I attached an image: .antigravity/uploads/photo-1794088637-1.jpg.\n\nWhy do I keep getting the stream was interrupted?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:58:25.037Z",
+      "sender": "ios",
+      "is_cancelled": false
+    },
+    {
+      "id": "4c07df4e-459f-40be-9046-37018d5170c0",
+      "role": "agent",
+      "content": "[TIMEOUT] The request took too long in Antigravity CLI.\nPlease try a shorter prompt or split the request into smaller steps.",
+      "status": "error",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "2d4618a9-d186-43c3-9d24-bfe36f0ab0df",
+      "created_at": "2026-11-07T21:58:37.106Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
