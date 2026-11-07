@@ -352,6 +352,18 @@
       "created_at": "2026-11-07T21:32:54.302Z",
       "sender": "ios",
       "is_cancelled": false
+    },
+    {
+      "id": "ff6d1089-5463-4f4f-a5c0-44eeb4dbaeeb",
+      "role": "agent",
+      "content": "I just built **SubSniper** for your iPhone! Give it a few seconds to save, then tap here to open it:\n\n👉 **[Open SubSniper Live App](https://antigravity.luch.dev/site/902266ae-5270-49fd-98c7-3a89a30dbf49/df7ae08c9d7c26fe5e8a39fa/)**\n\n---\n\n### What's Built Inside ([index.html](file:///home/agent/workspace/index.html), [app.js](file:///home/agent/workspace/app.js), [styles.css](file:///home/agent/workspace/styles.css)):\n\n1. **📸 On-Device Screenshot Scanner ([`parseSubscriptionText`](file:///home/agent/workspace/app.js#L351-L391))**:\n   - Tap **Screenshot Scan**, pick whether it's from **Apple App Store**, **Google Play**, or **Capital One**, and choose a screenshot from your iPhone Photos (or tap the **Sample iOS Screenshot Scan** button to test it immediately).\n   - It uses **Tesseract.js OCR** right on your phone to read the text, spot dollar amounts and free trials, and import them in one tap.\n\n2. **🏦 Capital One via Plaid Link & CSV Importer ([`parseCapitalOneCsv`](file:///home/agent/workspace/app.js#L422-L458))**:\n   - Tap **Capital One** to test the interactive **Plaid Link Sandbox** flow (or paste your own Plaid Link token under the `⚙️` menu—note that live Capital One bank connections on Plaid require registering a free developer account at `dashboard.plaid.com`).\n   - You can also drop a **Capital One CSV activity file** or screenshot directly in the same sheet to auto-detect recurring charges without needing a Plaid API key.\n\n3. **🎯 Free-Trial Sniper & 48h iPhone Calendar Alarms ([`downloadIcsAlarm`](file:///home/agent/workspace/app.js#L152-L194))**:\n   - Active free trials sit at the top in a pulsing **Sniper Radar** with a live day countdown.\n   - Tap **`⏰ 48h iOS Alarm`** on any trial to generate an iPhone Calendar alert set 48 hours before renewal, with a **1-tap direct cancel link** that jumps straight to Apple's iOS Subscription settings, Google Play's subscriptions page, or Capital One.\n\n4. **📲 Install to Your iPhone Home Screen ([manifest.json](file:///home/agent/workspace/manifest.json) & [icon.svg](file:///home/agent/workspace/icon.svg))**:\n   - Open the preview link in Safari, tap **Share** ➡️ **Add to Home Screen**, and it installs with its own custom Sniper icon in full-screen dark mode.",
+      "status": "completed",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "d5cff96f-b7a1-44ca-aebc-4430b3dc8bf4",
+      "created_at": "2026-11-07T21:36:50.516Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
