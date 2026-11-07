@@ -16,8 +16,21 @@
   --accent-purple: #8b5cf6;
   --capone-blue: #004977;
   --capone-red: #d03027;
-  --safe-top: env(safe-area-inset-top, 16px);
-  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --safe-top: max(env(safe-area-inset-top, 0px), 50px);
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), 34px);
+}
+
+.ios-status-shield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--safe-top);
+  background: linear-gradient(180deg, rgba(9, 13, 22, 0.94) 65%, rgba(9, 13, 22, 0));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 850;
+  pointer-events: none;
 }
 
 * {
@@ -422,26 +435,23 @@ body {
 /* Filter Pills */
 .filter-bar {
   display: flex;
-  gap: 7px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  margin-bottom: 12px;
-  scrollbar-width: none;
-}
-
-.filter-bar::-webkit-scrollbar {
-  display: none;
+  gap: 6px;
+  margin-bottom: 14px;
+  width: 100%;
 }
 
 .filter-pill {
+  flex: 1;
+  min-width: 0;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
-  padding: 7px 13px;
+  padding: 8px 6px;
   border-radius: 99px;
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 600;
   white-space: nowrap;
+  text-align: center;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -500,25 +510,33 @@ body {
   align-items: center;
   gap: 12px;
   min-width: 0;
+  flex: 1;
 }
 
 .sub-info {
   min-width: 0;
+  flex: 1;
 }
 
 .sub-title-row {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .sub-name {
-  font-size: 0.95rem;
+  font-size: 0.96rem;
   font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.sub-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .source-pill {
