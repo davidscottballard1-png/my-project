@@ -88,6 +88,42 @@
       "created_at": "2026-11-07T20:59:27.883Z",
       "sender": "ios",
       "is_cancelled": false
+    },
+    {
+      "id": "9c0160ab-3137-4ac6-9230-eb6066789cd2",
+      "role": "agent",
+      "content": "I am **Gemini 3.8 Flash** with high reasoning, developed by Google.",
+      "status": "completed",
+      "model": "gemini-3.8-flash-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "333edae5-7995-4c2d-a108-cda801ec11fe",
+      "created_at": "2026-11-07T20:59:33.629Z",
+      "sender": "macOS",
+      "is_cancelled": false
+    },
+    {
+      "id": "2189bd5d-9110-4c78-b1a3-6434037809eb",
+      "role": "user",
+      "content": "Now your argon is that better?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:00:00.246Z",
+      "sender": "ios",
+      "is_cancelled": false
+    },
+    {
+      "id": "6e3cadb5-ac67-400d-9d74-140c010f6236",
+      "role": "agent",
+      "content": "Yes—**Gemini 4 Argon** (with high reasoning) is a big step up!\n\nHere is the difference:\n- **Gemini 4 Argon**: Newer generation with stronger reasoning, better UI/UX design sense, and more reliable code generation for complex apps. It may take a few extra seconds to think, but the results are more thorough and polished.\n- **Gemini 3.8 Flash**: Optimized for speed and quick, lightweight edits.\n\nFor designing and building a complete app from scratch, **Gemini 4 Argon** is the better choice. What would you like to build first?",
+      "status": "completed",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "2189bd5d-9110-4c78-b1a3-6434037809eb",
+      "created_at": "2026-11-07T21:00:12.494Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
