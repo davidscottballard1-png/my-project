@@ -172,6 +172,18 @@
       "created_at": "2026-11-07T21:09:48.438Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "e10cc711-ec15-4858-8a31-42ef0b2a0a95",
+      "role": "user",
+      "content": "Why can’t I tell Amazon I’m ok with this app?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:11:53.232Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
