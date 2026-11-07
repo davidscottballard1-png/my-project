@@ -508,6 +508,18 @@
       "created_at": "2026-11-07T21:55:13.753Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "8fcb8b61-fd82-4671-a1d8-542be885cac3",
+      "role": "user",
+      "content": "I attached an image: .antigravity/uploads/photo-1794088637-1.jpg.\n\nWhy do I keep getting the stream was interrupted?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:57:20.141Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
