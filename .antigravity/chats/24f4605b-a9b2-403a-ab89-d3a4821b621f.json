@@ -28,6 +28,18 @@
       "created_at": "2026-11-07T22:27:15.148Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "ead5eb75-2aac-46f4-9bb9-f94b728b96fc",
+      "role": "user",
+      "content": "Can you check my app again? Did you finish running the bug test?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T22:29:10.762Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
