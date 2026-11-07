@@ -496,6 +496,18 @@
       "created_at": "2026-11-07T21:50:01.853Z",
       "sender": "ios",
       "is_cancelled": false
+    },
+    {
+      "id": "1a110a73-c0c1-47ac-a502-62bd1de022a6",
+      "role": "agent",
+      "content": "The stream was interrupted. Please continue the task you were working on.\nI wrote a full automated test suite in [test/app.test.mjs](file:///home/agent/workspace/test/app.test.mjs) and scanned the entire app ([app.js](file:///home/agent/workspace/app.js) and [index.html](file:///home/agent/workspace/index.html)).\n\nYou were right—it caught **7 real bugs**, all of which are now fixed and passing (`7/7` tests green):\n\n---\n\n### 🐛 Bugs Found & Fixed:\n\n1. **OCR Regex Mangling `/month` into `\"nth\"` ([`parseSubscriptionText`](file:///home/agent/workspace/app.js#L308-L379))**:\n   - The regex `/\\/(mo|month|yr|year)/` matched `/mo` inside `/month` first, leaving `\"nth\"` behind and naming scanned items `\"nth\"`. Fixed to match full words (`/\\/(month|mo|year|yr|week|wk)\\b/`) and look up 1–2 lines above the price for multi-line iOS Settings screenshots.\n2. **Deleted Sample Subscriptions Returning on Refresh ([`loadSubscriptions`](file:///home/agent/workspace/app.js#L120-L135))**:\n   - Previously, `parsed.length > 0` meant if you deleted all 8 sample items, refreshing the page brought all 8 back! Now it respects an empty list `[]`, and I added a **🧹 Clear Sample Data** button in the top-right header.\n3. **Bottom Navigation & Stacking Sheets ([`openModal`](file:///home/agent/workspace/app.js#L622-L631) & [`closeAllModals`](file:///home/agent/workspace/app.js#L609-L613))**:\n   - Tapping the bottom nav tabs while a sheet was open stacked multiple popups on top of each other, and the **📊 Dashboard** tab had no click handler. Now switching tabs cleanly closes any open sheet.\n4. **Evening Timezone Day-Shift Bug ([`daysFromNow`](file:///home/agent/workspace/app.js#L14-L18) & [`daysUntil`](file:///home/agent/workspace/app.js#L20-L28))**:\n   - Using UTC `.toISOString()` caused dates after 7:00 PM Eastern to shift forward by 1 day. Switched to local device time.\n5. **Large iPhone Screenshot Memory Freeze ([`downscaleImageForOcr`](file:///home/agent/workspace/app.js#L455-L483))**:\n   - Full-resolution iPhone screenshots could stall mobile Safari during OCR; images are now automatically downscaled on canvas before scanning, and scanned items can be **edited inline** before importing.\n6. **Quoted Commas in Capital One CSVs ([`splitCsvLine`](file:///home/agent/workspace/app.js#L382-L404) & [`parseCapitalOneCsv`](file:///home/agent/workspace/app.js#L407-L452))**:\n   - Merchant names with commas (like `\"NETFLIX.COM, LOS GATOS, CA\"`) broke simple `.split(\",\")` parsing. Added an RFC-4180 quote-aware parser.\n7. **Missing \"Edit Subscription\" Option ([`openEditSub`](file:///home/agent/workspace/app.js#L714-L727))**:\n   - Tapping a subscription previously only let you delete it; now you can tap **✏️ Edit Subscription Details** to change the name, price, billing cycle, or date.\n\n---\n\n### Try the Fixed Version:\n👉 **[Open Updated SubSniper Live App](https://antigravity.luch.dev/site/902266ae-5270-49fd-98c7-3a89a30dbf49/df7ae08c9d7c26fe5e8a39fa/)**",
+      "status": "error",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "1b196272-e21b-44f6-97e0-a39d21dd49b8",
+      "created_at": "2026-11-07T21:55:13.753Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
