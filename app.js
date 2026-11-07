@@ -695,13 +695,13 @@ function renderOcrDetectedList() {
       (item, idx) => `
     <div class="detected-item" style="gap:8px;">
       <div style="flex:1; min-width:0;">
-        <input type="text" class="form-input" value="${escapeHtml(item.name)}" onchange="updateOcrItemName(${idx}, this.value)" style="padding:6px 9px; font-size:0.84rem; margin-bottom:4px;" />
+        <input type="text" class="form-input" value="${escapeHtml(item.name)}" oninput="updateOcrItemName(${idx}, this.value)" onchange="updateOcrItemName(${idx}, this.value)" style="padding:6px 9px; font-size:0.84rem; margin-bottom:4px;" />
         <div style="font-size:0.72rem; color:var(--text-secondary);">
           ${getSourceMeta(item.source).label} ${item.isTrial ? "• 🎯 Free Trial" : ""}
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:6px;">
-        <input type="number" step="0.01" class="form-input" value="${Number(item.price).toFixed(2)}" onchange="updateOcrItemPrice(${idx}, this.value)" style="width:82px; padding:6px 8px; font-size:0.84rem; text-align:right;" />
+        <input type="number" step="0.01" class="form-input" value="${Number(item.price).toFixed(2)}" oninput="updateOcrItemPrice(${idx}, this.value)" onchange="updateOcrItemPrice(${idx}, this.value)" style="width:82px; padding:6px 8px; font-size:0.84rem; text-align:right;" />
         <button type="button" class="btn-close" onclick="removeOcrItem(${idx})" title="Remove">✕</button>
       </div>
     </div>
