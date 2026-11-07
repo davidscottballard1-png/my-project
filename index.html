@@ -18,7 +18,7 @@
   <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js" defer></script>
 </head>
 <body>
-  <div id="toast" class="toast">Saved!</div>
+  <div id="toast" class="toast" role="status" aria-live="polite">Saved!</div>
 
   <div class="app-shell">
     <!-- Header -->
@@ -33,6 +33,7 @@
         </div>
       </div>
       <div class="header-actions">
+        <button class="icon-btn" id="btnClearAll" title="Clear Sample Data">🧹</button>
         <button class="icon-btn" id="btnAddManual" title="Add Subscription">＋</button>
       </div>
     </header>
@@ -57,9 +58,9 @@
       </div>
 
       <div class="source-bar">
-        <div class="source-segment seg-apple" id="barApple" style="width: 33%"></div>
-        <div class="source-segment seg-google" id="barGoogle" style="width: 33%"></div>
-        <div class="source-segment seg-capone" id="barCapOne" style="width: 34%"></div>
+        <div class="source-segment seg-apple" id="barApple" style="width: 0%"></div>
+        <div class="source-segment seg-google" id="barGoogle" style="width: 0%"></div>
+        <div class="source-segment seg-capone" id="barCapOne" style="width: 0%"></div>
       </div>
 
       <div class="source-legend">
@@ -80,19 +81,19 @@
 
     <!-- 3 Core Tools: Screenshot OCR, Capital One / Plaid, Free Trial Sniper -->
     <section class="quick-actions">
-      <button class="action-tile tile-ocr" id="btnOpenOcr">
+      <button class="action-tile tile-ocr" id="btnOpenOcr" type="button">
         <span class="tile-icon">📸</span>
         <span class="tile-title">Screenshot Scan</span>
         <span class="tile-sub">App Store & Play OCR</span>
       </button>
 
-      <button class="action-tile tile-plaid" id="btnOpenPlaid">
+      <button class="action-tile tile-plaid" id="btnOpenPlaid" type="button">
         <span class="tile-icon">🏦</span>
         <span class="tile-title">Capital One</span>
         <span class="tile-sub">Plaid & CSV Sync</span>
       </button>
 
-      <button class="action-tile tile-sniper" id="btnOpenSniper">
+      <button class="action-tile tile-sniper" id="btnOpenSniper" type="button">
         <span class="tile-icon">🎯</span>
         <span class="tile-title">Snipe Free Trial</span>
         <span class="tile-sub">48h Cancel Alarm</span>
@@ -112,15 +113,15 @@
 
     <!-- Filter Bar -->
     <div class="filter-bar" id="filterBar">
-      <button class="filter-pill active" data-filter="all">All Subscriptions</button>
-      <button class="filter-pill" data-filter="apple">🍎 App Store</button>
-      <button class="filter-pill" data-filter="google">▶️ Google Play</button>
-      <button class="filter-pill" data-filter="capone">💳 Capital One</button>
+      <button class="filter-pill active" data-filter="all" type="button">All Subscriptions</button>
+      <button class="filter-pill" data-filter="apple" type="button">🍎 App Store</button>
+      <button class="filter-pill" data-filter="google" type="button">▶️ Google Play</button>
+      <button class="filter-pill" data-filter="capone" type="button">💳 Capital One</button>
     </div>
 
     <!-- Main Subscriptions List -->
     <div class="section-header">
-      <div class="section-title">Recurring Charges</div>
+      <div class="section-title">Recurring & Trial Charges</div>
       <div class="section-count" id="subCountLabel">0 items</div>
     </div>
     <div class="sub-list" id="subListContainer"></div>
@@ -128,19 +129,19 @@
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <button class="nav-item active" id="navDashboard">
+    <button class="nav-item active" id="navDashboard" type="button">
       <span class="nav-icon">📊</span>
       <span>Dashboard</span>
     </button>
-    <button class="nav-item" id="navOcr">
+    <button class="nav-item" id="navOcr" type="button">
       <span class="nav-icon">📸</span>
       <span>Scan Screenshot</span>
     </button>
-    <button class="nav-item" id="navPlaid">
+    <button class="nav-item" id="navPlaid" type="button">
       <span class="nav-icon">🏦</span>
       <span>Capital One</span>
     </button>
-    <button class="nav-item" id="navSniper">
+    <button class="nav-item" id="navSniper" type="button">
       <span class="nav-icon">🎯</span>
       <span>Snipe Trial</span>
     </button>
@@ -152,7 +153,7 @@
       <div class="sheet-handle"></div>
       <div class="sheet-header">
         <div class="sheet-title">📸 Screenshot OCR Scanner</div>
-        <button class="btn-close" data-close="modalOcr">✕</button>
+        <button class="btn-close" data-close="modalOcr" type="button">✕</button>
       </div>
 
       <div class="status-box">
@@ -163,7 +164,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Tag scanned items under:</label>
+        <label class="form-label" for="ocrSourceSelect">Tag scanned items under:</label>
         <select class="form-select" id="ocrSourceSelect">
           <option value="apple">🍎 Apple App Store</option>
           <option value="google">▶️ Google Play Store</option>
@@ -175,7 +176,7 @@
         <input type="file" id="ocrFileInput" accept="image/*" />
         <div class="upload-icon">🖼️</div>
         <div class="upload-title">Tap to Choose Screenshot from Photos</div>
-        <div class="upload-desc">Runs 100% on your iPhone using Tesseract OCR</div>
+        <div class="upload-desc">Auto-optimizes & scans on your iPhone using OCR</div>
       </label>
 
       <div id="ocrProgressBox" style="display:none;" class="status-box">
@@ -183,12 +184,12 @@
       </div>
 
       <div id="ocrResultsArea" style="display:none;">
-        <div class="form-label">Detected Subscriptions (Tap to Import):</div>
+        <div class="form-label">Detected Subscriptions (Editable before import):</div>
         <div id="ocrDetectedList"></div>
-        <button class="btn-primary" id="btnImportAllOcr">Import All Detected</button>
+        <button class="btn-primary" id="btnImportAllOcr" type="button">Import Detected Items</button>
       </div>
 
-      <button class="btn-secondary" id="btnDemoOcrScan">✨ Try Instant Sample iOS Screenshot Scan</button>
+      <button class="btn-secondary" id="btnDemoOcrScan" type="button">✨ Test with Sample iOS Screenshot</button>
     </div>
   </div>
 
@@ -197,66 +198,67 @@
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <div class="sheet-title">🏦 Capital One & Plaid Sync</div>
-        <button class="btn-close" data-close="modalPlaid">✕</button>
+        <div class="sheet-title">🏦 Capital One & Bank Sync</div>
+        <button class="btn-close" data-close="modalPlaid" type="button">✕</button>
       </div>
 
       <div class="status-box">
-        Connect your <strong>Capital One</strong> card via Plaid Link or drop a Capital One CSV export to automatically find recurring charges and filter out one-time purchases.
+        Sync your <strong>Capital One</strong> recurring charges via a downloaded CSV statement, screenshot OCR, or Plaid Link.
       </div>
 
-      <!-- Option A: Plaid Link Button -->
-      <button class="btn-primary" id="btnLaunchPlaid" style="margin-bottom: 10px;">
-        🔗 Connect Capital One with Plaid Link
-      </button>
-
-      <!-- Option B: Capital One CSV Statement Drop -->
+      <!-- Option A: Capital One CSV Statement Drop -->
       <label class="upload-zone" style="margin-top: 8px;">
-        <input type="file" id="csvFileInput" accept=".csv,text/csv" />
+        <input type="file" id="csvFileInput" accept=".csv,text/csv,text/plain" />
         <div class="upload-icon">📄</div>
-        <div class="upload-title">Or Drop Capital One CSV Activity File</div>
-        <div class="upload-desc">Auto-detects repeating monthly charges on-device</div>
+        <div class="upload-title">Upload Capital One CSV Activity File</div>
+        <div class="upload-desc">Auto-detects repeating charges & ignores one-time spend</div>
       </label>
 
+      <!-- Option B: Plaid Link / Sandbox Button -->
+      <button class="btn-primary" id="btnLaunchPlaid" type="button" style="margin-bottom: 10px;">
+        🔗 Test Capital One Plaid Link Flow
+      </button>
+
       <!-- Optional Custom Plaid Link Token Input -->
-      <details style="margin-top: 10px; font-size: 0.78rem; color: var(--text-secondary);">
-        <summary style="cursor: pointer; font-weight: 600; margin-bottom: 8px;">⚙️ Have your own Plaid Link Token? (Optional)</summary>
+      <details style="margin-top: 6px; font-size: 0.78rem; color: var(--text-secondary);">
+        <summary style="cursor: pointer; font-weight: 600; margin-bottom: 8px;">⚙️ Have a Plaid Link Token? (Optional)</summary>
         <div class="form-group">
           <input type="text" class="form-input" id="customPlaidToken" placeholder="link-sandbox-xxxxxxxx or link-production-..." />
-          <div style="margin-top:4px; font-size:0.7rem;">If left blank, clicking Connect runs an interactive Capital One Plaid Sandbox sync so you can test the full flow immediately.</div>
+          <div style="margin-top:4px; font-size:0.7rem;">Leave blank to run the built-in Capital One sandbox detector.</div>
         </div>
       </details>
 
       <div id="plaidResultsArea" style="display:none; margin-top: 12px;">
         <div class="form-label">Recurring Capital One Charges Found:</div>
         <div id="plaidDetectedList"></div>
-        <button class="btn-primary" id="btnImportPlaid">Add Selected to Dashboard</button>
+        <button class="btn-primary" id="btnImportPlaid" type="button">Add Selected to Dashboard</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 3: Snipe a Free Trial / Add Subscription -->
+  <!-- MODAL 3: Snipe a Free Trial / Add or Edit Subscription -->
   <div class="modal-backdrop" id="modalAdd">
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
         <div class="sheet-title" id="modalAddTitle">🎯 Snipe a Free Trial</div>
-        <button class="btn-close" data-close="modalAdd">✕</button>
+        <button class="btn-close" data-close="modalAdd" type="button">✕</button>
       </div>
 
       <form id="subForm">
+        <input type="hidden" id="inputEditId" value="" />
         <div class="form-group">
-          <label class="form-label">Service / App Name</label>
+          <label class="form-label" for="inputName">Service / App Name</label>
           <input type="text" class="form-input" id="inputName" placeholder="e.g., Apple TV+, YouTube Premium, Audible" required />
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Price (After Trial)</label>
-            <input type="number" step="0.01" class="form-input" id="inputPrice" placeholder="14.99" required />
+            <label class="form-label" for="inputPrice">Price ($)</label>
+            <input type="number" step="0.01" min="0.01" max="9999" class="form-input" id="inputPrice" placeholder="14.99" required />
           </div>
           <div class="form-group">
-            <label class="form-label">Billing Cycle</label>
+            <label class="form-label" for="inputCycle">Billing Cycle</label>
             <select class="form-select" id="inputCycle">
               <option value="monthly">Monthly</option>
               <option value="yearly">Yearly</option>
@@ -267,7 +269,7 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Billed Through</label>
+            <label class="form-label" for="inputSource">Billed Through</label>
             <select class="form-select" id="inputSource">
               <option value="apple">🍎 Apple App Store</option>
               <option value="google">▶️ Google Play Store</option>
@@ -275,31 +277,31 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">Next Charge / Trial End</label>
+            <label class="form-label" for="inputDate">Next Charge / Trial End</label>
             <input type="date" class="form-input" id="inputDate" required />
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Subscription Type</label>
+          <label class="form-label" for="inputIsTrial">Subscription Type</label>
           <select class="form-select" id="inputIsTrial">
             <option value="true">🎯 Free Trial (Activate 48h Sniper Alarm)</option>
             <option value="false">🔄 Active Recurring Subscription</option>
           </select>
         </div>
 
-        <button type="submit" class="btn-primary">Save & Activate Sniper</button>
+        <button type="submit" class="btn-primary" id="btnSubmitSubForm">Save & Activate Sniper</button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 4: Subscription Action / Cancel Sheet -->
+  <!-- MODAL 4: Subscription Action / Cancel / Edit Sheet -->
   <div class="modal-backdrop" id="modalDetail">
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
         <div class="sheet-title" id="detailTitle">Subscription Details</div>
-        <button class="btn-close" data-close="modalDetail">✕</button>
+        <button class="btn-close" data-close="modalDetail" type="button">✕</button>
       </div>
       <div id="detailBody"></div>
     </div>
