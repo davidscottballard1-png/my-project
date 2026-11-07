@@ -340,6 +340,18 @@
       "created_at": "2026-11-07T21:32:20.649Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "d5cff96f-b7a1-44ca-aebc-4430b3dc8bf4",
+      "role": "user",
+      "content": "Can we build it with the screenshot scanner and plaid?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:32:54.302Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
