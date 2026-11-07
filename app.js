@@ -352,6 +352,19 @@ function parseSubscriptionText(rawText, source = "apple", baseDate = new Date())
   // Matches $9.99, $ 14.99, USD 9.99, or 9.99/month
   const priceRegex = /(?:\$\s*|USD\s*)(\d{1,3}(?:\.\d{2}))|(\d{1,3}\.\d{2})\s*(?:\/|\s*per\s*)(?:mo|month|yr|year|wk|week)/i;
   const ignoreNameWords = /^(renews.*|expires.*|active|subscriptions|your subscriptions|included|billing|payment|apple|google|capital one|monthly|annual|yearly|weekly|individual.*|family.*|student.*|annual plan|monthly plan|plan|free trial|trial|see all|manage)$/i;
+  // Plan tier subtitles in iOS Settings (where the actual App Name is 1 line above the subtitle)
+  const planTierSubtitleRegex = /^(pro|plus|premier|premium|standard|basic|individual|family|student|monthly|annual|yearly|weekly|plan|tier|subscription|1\s*month|1\s*year|\d+\s*(?:tb|gb))(?:\s+(?:plan|monthly|annual|yearly|weekly|subscription|tier))?$/i;
+
+  const cleanLineCandidate = (str) =>
+    cleanScannedName(
+      String(str || "")
+        .replace(priceRegex, "")
+        .replace(/\/(month|mo|year|yr|week|wk)\b/gi, "")
+        .replace(/\b(per\s+month|per\s+year|free\s+trial|trial|renews.*|expires.*|individual\s+plan|family\s+plan|student\s+plan|annual\s+plan|monthly\s+plan)\b/gi, "")
+        .replace(/[-•|:$()]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+    );
 
   for (let i = 0; i < lines.length; i++) {
     const match = lines[i].match(priceRegex);
@@ -361,31 +374,43 @@ function parseSubscriptionText(rawText, source = "apple", baseDate = new Date())
     if (isNaN(priceVal) || priceVal <= 0 || priceVal > 600) continue;
 
     // Try extracting service name from current line first
-    let nameCandidate = lines[i]
-      .replace(priceRegex, "")
-      .replace(/\/(month|mo|year|yr|week|wk)\b/gi, "")
-      .replace(/\b(per\s+month|per\s+year|monthly|yearly|annual|free\s+trial|trial|renews.*|expires.*|individual\s+plan|family\s+plan|student\s+plan|annual\s+plan|monthly\s+plan)\b/gi, "")
-      .replace(/[-•|:$()]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+    let nameCandidate = cleanLineCandidate(lines[i]);
+    if (nameCandidate === "Subscription") nameCandidate = "";
 
     // If current line only had the price/plan tier, look 1 or 2 lines above (standard iOS Settings layout)
-    if (nameCandidate.length < 3 || ignoreNameWords.test(nameCandidate)) {
-      for (let back = 1; back <= 2; back++) {
-        if (i - back >= 0) {
-          const prevClean = lines[i - back]
-            .replace(priceRegex, "")
-            .replace(/[-•|:$()]/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-          if (prevClean.length >= 2 && !ignoreNameWords.test(prevClean) && !/^\d+$/.test(prevClean)) {
-            nameCandidate = prevClean;
-            break;
-          }
+    if (nameCandidate.length < 3 || ignoreNameWords.test(nameCandidate) || planTierSubtitleRegex.test(nameCandidate)) {
+      const line1Up = i - 1 >= 0 && !priceRegex.test(lines[i - 1]) ? cleanLineCandidate(lines[i - 1]) : "";
+      const line2Up = i - 2 >= 0 && !priceRegex.test(lines[i - 2]) ? cleanLineCandidate(lines[i - 2]) : "";
+
+      const isLine1Valid =
+        line1Up.length >= 2 &&
+        line1Up !== "Subscription" &&
+        !ignoreNameWords.test(line1Up) &&
+        !/^\d+$/.test(line1Up);
+      const isLine2Valid =
+        line2Up.length >= 2 &&
+        line2Up !== "Subscription" &&
+        !ignoreNameWords.test(line2Up) &&
+        !planTierSubtitleRegex.test(line2Up) &&
+        !/^\d+$/.test(line2Up);
+
+      if (isLine1Valid && planTierSubtitleRegex.test(line1Up) && isLine2Valid) {
+        // e.g. line2Up = "Apple One" (or "One") and line1Up = "Premier", or line2Up = "ChatGPT" and line1Up = "Pro Monthly"
+        if (/^(apple\s+one|one)$/i.test(line2Up) && /^premier$/i.test(line1Up)) {
+          nameCandidate = "Apple One Premier";
+        } else {
+          nameCandidate = line2Up;
         }
+      } else if (isLine1Valid && !planTierSubtitleRegex.test(line1Up)) {
+        nameCandidate = line1Up;
+      } else if (isLine2Valid) {
+        nameCandidate = line2Up;
+      } else if (isLine1Valid) {
+        nameCandidate = line1Up;
       }
     }
 
+    nameCandidate = cleanScannedName(nameCandidate);
     if (!nameCandidate || nameCandidate.length < 2 || ignoreNameWords.test(nameCandidate)) {
       nameCandidate = "Scanned Subscription";
     }
@@ -401,7 +426,7 @@ function parseSubscriptionText(rawText, source = "apple", baseDate = new Date())
 
     detected.push({
       id: "ocr-" + Date.now() + "-" + detected.length,
-      name: nameCandidate.slice(0, 32),
+      name: nameCandidate.slice(0, 36),
       price: priceVal,
       cycle,
       source,
@@ -669,10 +694,12 @@ function renderDashboard() {
           <div class="sub-info">
             <div class="sub-title-row">
               <span class="sub-name">${escapeHtml(s.name)}</span>
+            </div>
+            <div class="sub-meta-row">
               <span class="source-pill ${meta.className}">${meta.label}</span>
               ${s.isTrial ? `<span class="source-pill" style="background:rgba(245,158,11,0.2);color:#fde68a;">TRIAL</span>` : ""}
+              <span class="sub-renews ${soonClass}">${renewsText}</span>
             </div>
-            <div class="sub-renews ${soonClass}">${renewsText}</div>
           </div>
         </div>
         <div class="sub-right">
@@ -884,6 +911,7 @@ if (typeof window !== "undefined") {
 function initApp() {
   if (typeof document === "undefined") return;
   subscriptions = loadSubscriptions();
+  saveSubscriptions();
   const dateInput = document.getElementById("inputDate");
   if (dateInput) dateInput.value = daysFromNow(7);
   renderDashboard();
@@ -1209,6 +1237,8 @@ if (typeof module !== "undefined" && module.exports) {
     calculateTotals,
     getSourceMeta,
     buildIcsContent,
+    cleanScannedName,
+    sanitizeSubscriptionList,
     parseSubscriptionText,
     splitCsvLine,
     parseCapitalOneCsv,
