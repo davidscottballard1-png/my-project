@@ -124,8 +124,10 @@ function loadSubscriptions(storage = typeof localStorage !== "undefined" ? local
       const raw = storage.getItem(STORAGE_KEY);
       if (raw !== null) {
         const parsed = JSON.parse(raw);
-        // Respect empty array [] when user clears all subscriptions!
-        if (Array.isArray(parsed)) return parsed;
+        // Respect empty array [] when user clears all subscriptions, and auto-repair any OCR-truncated names!
+        if (Array.isArray(parsed)) {
+          return sanitizeSubscriptionList(parsed);
+        }
       }
     }
   } catch (e) {
@@ -156,15 +158,48 @@ function showToast(msg) {
 
 function guessIcon(name) {
   const n = String(name || "").toLowerCase();
+  if (n.includes("applecare") || n.includes("apple one") || n.includes("apple tv") || n.includes("apple music")) return "🍎";
   if (n.includes("netflix") || n.includes("hulu") || n.includes("max") || n.includes("disney") || n.includes("tv") || n.includes("paramount") || n.includes("peacock")) return "🎬";
   if (n.includes("spotify") || n.includes("music") || n.includes("audible") || n.includes("podcast")) return "🎧";
   if (n.includes("icloud") || n.includes("google one") || n.includes("dropbox") || n.includes("drive")) return "☁️";
   if (n.includes("game") || n.includes("steam") || n.includes("xbox") || n.includes("playstation") || n.includes("arcade") || n.includes("nintendo")) return "🎮";
   if (n.includes("youtube")) return "▶️";
-  if (n.includes("chatgpt") || n.includes("claude") || n.includes("ai") || n.includes("copilot")) return "🤖";
+  if (n.includes("chatgpt") || n.includes("claude") || n.includes("ai") || n.includes("copilot") || n.includes("pro monthly")) return "🤖";
   if (n.includes("amazon") || n.includes("prime") || n.includes("instacart") || n.includes("doordash") || n.includes("uber")) return "📦";
   if (n.includes("gym") || n.includes("fitness") || n.includes("strava") || n.includes("peloton") || n.includes("whoop")) return "💪";
   return "💳";
+}
+
+// Clean OCR artifacts from left-aligned app icons ("0 AppleCare One", "®) Pro Monthly", "One Premier" -> "one Premier")
+function cleanScannedName(rawName) {
+  let s = String(rawName || "").trim();
+  // Strip leading non-alphanumeric symbol clusters (e.g. "®) ", "© ", "• ")
+  s = s.replace(/^[^a-zA-Z0-9]+/, "").trim();
+  // Strip isolated leading single digit/character caused by app icon OCR ("0 AppleCare One", "O Apple One")
+  s = s.replace(/^(?:[0O®©™@|\]\[()!*~<>«»]{1,3}\s+)+/, "").trim();
+  s = s.replace(/^[^a-zA-Z0-9]+/, "").trim();
+  // Restore "Apple " when iOS uses the  Apple glyph before "One Premier / Family / Individual"
+  if (/^one\s+(premier|family|individual)\b/i.test(s)) {
+    s = "Apple " + s.charAt(0).toUpperCase() + s.slice(1);
+  } else if (/^apple\s+one\s+premier$/i.test(s)) {
+    s = "Apple One Premier";
+  }
+  return s || "Subscription";
+}
+
+function sanitizeSubscriptionList(list) {
+  if (!Array.isArray(list)) return list;
+  return list.map((item) => {
+    if (!item || typeof item !== "object") return item;
+    const cleanedName = cleanScannedName(item.name);
+    const updatedIcon =
+      !item.icon || item.icon === "💳" ? guessIcon(cleanedName) : item.icon;
+    return {
+      ...item,
+      name: cleanedName,
+      icon: updatedIcon
+    };
+  });
 }
 
 function toMonthlyEquivalent(price, cycle) {
