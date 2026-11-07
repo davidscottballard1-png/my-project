@@ -124,6 +124,18 @@
       "created_at": "2026-11-07T21:00:12.494Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "8cad2d7e-16cd-421c-b0b0-06385721919d",
+      "role": "user",
+      "content": "Hmmm how well can you build a app that searches Amazon, asks what address I’m using, the credit card to use, and the thing I want, gives me some high quality options to pick and orders the thing for me with the fastest shipping?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:05:31.421Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
