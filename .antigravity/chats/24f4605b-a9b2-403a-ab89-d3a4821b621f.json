@@ -52,6 +52,18 @@
       "created_at": "2026-11-07T22:30:51.910Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "7afdae37-41c3-4450-86a2-40606ad73c9d",
+      "role": "user",
+      "content": "I attached an image: .antigravity/uploads/photo-1794090790-1.jpg.\n\nWhy are things getting cut off?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T22:33:13.567Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
