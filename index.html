@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>SubSniper — Subscription & Trial Sniper</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SubSniper" />
+  <meta name="theme-color" content="#090d16" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Tesseract.js for On-Device Screenshot OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
+  <!-- Official Plaid Link SDK -->
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast">Saved!</div>
+
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="top-header">
+      <div class="brand-row">
+        <img src="./icon.svg" alt="SubSniper" class="brand-logo" />
+        <div>
+          <div class="brand-title">
+            SubSniper <span class="badge-live">iOS Ready</span>
+          </div>
+          <div class="brand-subtitle">App Store • Google Play • Capital One</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btnAddManual" title="Add Subscription">＋</button>
+      </div>
+    </header>
+
+    <!-- Apple Card-style Spend Summary -->
+    <section class="hero-card">
+      <div class="hero-top">
+        <div>
+          <div class="hero-label">Total Monthly Burn</div>
+          <div class="hero-amount" id="monthlyTotal">$0.00<span>/mo</span></div>
+        </div>
+        <div class="hero-metrics">
+          <div class="mini-metric">
+            <div class="mini-metric-label">Daily Cost</div>
+            <div class="mini-metric-val" id="dailyCost">$0.00/d</div>
+          </div>
+          <div class="mini-metric">
+            <div class="mini-metric-label">Yearly</div>
+            <div class="mini-metric-val" id="yearlyTotal">$0/yr</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <div class="source-segment seg-apple" id="barApple" style="width: 33%"></div>
+        <div class="source-segment seg-google" id="barGoogle" style="width: 33%"></div>
+        <div class="source-segment seg-capone" id="barCapOne" style="width: 34%"></div>
+      </div>
+
+      <div class="source-legend">
+        <div class="legend-item">
+          <span class="legend-dot seg-apple"></span>
+          App Store <span class="legend-val" id="sumApple">$0</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot seg-google"></span>
+          Google Play <span class="legend-val" id="sumGoogle">$0</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot seg-capone"></span>
+          Capital One <span class="legend-val" id="sumCapOne">$0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 Core Tools: Screenshot OCR, Capital One / Plaid, Free Trial Sniper -->
+    <section class="quick-actions">
+      <button class="action-tile tile-ocr" id="btnOpenOcr">
+        <span class="tile-icon">📸</span>
+        <span class="tile-title">Screenshot Scan</span>
+        <span class="tile-sub">App Store & Play OCR</span>
+      </button>
+
+      <button class="action-tile tile-plaid" id="btnOpenPlaid">
+        <span class="tile-icon">🏦</span>
+        <span class="tile-title">Capital One</span>
+        <span class="tile-sub">Plaid & CSV Sync</span>
+      </button>
+
+      <button class="action-tile tile-sniper" id="btnOpenSniper">
+        <span class="tile-icon">🎯</span>
+        <span class="tile-title">Snipe Free Trial</span>
+        <span class="tile-sub">48h Cancel Alarm</span>
+      </button>
+    </section>
+
+    <!-- Active Free Trial Sniper Radar -->
+    <section class="sniper-radar" id="sniperRadarSection">
+      <div class="radar-header">
+        <div class="radar-title">
+          <span class="pulse-dot"></span> Free-Trial Sniper Radar
+        </div>
+        <span class="section-count" id="trialCountLabel">0 active</span>
+      </div>
+      <div id="trialListContainer"></div>
+    </section>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-pill active" data-filter="all">All Subscriptions</button>
+      <button class="filter-pill" data-filter="apple">🍎 App Store</button>
+      <button class="filter-pill" data-filter="google">▶️ Google Play</button>
+      <button class="filter-pill" data-filter="capone">💳 Capital One</button>
+    </div>
+
+    <!-- Main Subscriptions List -->
+    <div class="section-header">
+      <div class="section-title">Recurring Charges</div>
+      <div class="section-count" id="subCountLabel">0 items</div>
+    </div>
+    <div class="sub-list" id="subListContainer"></div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="navDashboard">
+      <span class="nav-icon">📊</span>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-item" id="navOcr">
+      <span class="nav-icon">📸</span>
+      <span>Scan Screenshot</span>
+    </button>
+    <button class="nav-item" id="navPlaid">
+      <span class="nav-icon">🏦</span>
+      <span>Capital One</span>
+    </button>
+    <button class="nav-item" id="navSniper">
+      <span class="nav-icon">🎯</span>
+      <span>Snipe Trial</span>
+    </button>
+  </nav>
+
+  <!-- MODAL 1: Screenshot OCR Scanner -->
+  <div class="modal-backdrop" id="modalOcr">
+    <div class="modal-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">📸 Screenshot OCR Scanner</div>
+        <button class="btn-close" data-close="modalOcr">✕</button>
+      </div>
+
+      <div class="status-box">
+        <strong>How to scan your subscriptions:</strong><br/>
+        • <strong>iPhone:</strong> Open <em>Settings → Your Name → Subscriptions</em> and take a screenshot.<br/>
+        • <strong>Google Play:</strong> Screenshot <em>Payments & Subscriptions</em>.<br/>
+        • <strong>Capital One:</strong> Screenshot your recurring charges list.
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tag scanned items under:</label>
+        <select class="form-select" id="ocrSourceSelect">
+          <option value="apple">🍎 Apple App Store</option>
+          <option value="google">▶️ Google Play Store</option>
+          <option value="capone">💳 Capital One Card</option>
+        </select>
+      </div>
+
+      <label class="upload-zone" id="ocrDropZone">
+        <input type="file" id="ocrFileInput" accept="image/*" />
+        <div class="upload-icon">🖼️</div>
+        <div class="upload-title">Tap to Choose Screenshot from Photos</div>
+        <div class="upload-desc">Runs 100% on your iPhone using Tesseract OCR</div>
+      </label>
+
+      <div id="ocrProgressBox" style="display:none;" class="status-box">
+        <div id="ocrStatusText">Scanning screenshot text...</div>
+      </div>
+
+      <div id="ocrResultsArea" style="display:none;">
+        <div class="form-label">Detected Subscriptions (Tap to Import):</div>
+        <div id="ocrDetectedList"></div>
+        <button class="btn-primary" id="btnImportAllOcr">Import All Detected</button>
+      </div>
+
+      <button class="btn-secondary" id="btnDemoOcrScan">✨ Try Instant Sample iOS Screenshot Scan</button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Capital One & Plaid Link / CSV Sync -->
+  <div class="modal-backdrop" id="modalPlaid">
+    <div class="modal-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">🏦 Capital One & Plaid Sync</div>
+        <button class="btn-close" data-close="modalPlaid">✕</button>
+      </div>
+
+      <div class="status-box">
+        Connect your <strong>Capital One</strong> card via Plaid Link or drop a Capital One CSV export to automatically find recurring charges and filter out one-time purchases.
+      </div>
+
+      <!-- Option A: Plaid Link Button -->
+      <button class="btn-primary" id="btnLaunchPlaid" style="margin-bottom: 10px;">
+        🔗 Connect Capital One with Plaid Link
+      </button>
+
+      <!-- Option B: Capital One CSV Statement Drop -->
+      <label class="upload-zone" style="margin-top: 8px;">
+        <input type="file" id="csvFileInput" accept=".csv,text/csv" />
+        <div class="upload-icon">📄</div>
+        <div class="upload-title">Or Drop Capital One CSV Activity File</div>
+        <div class="upload-desc">Auto-detects repeating monthly charges on-device</div>
+      </label>
+
+      <!-- Optional Custom Plaid Link Token Input -->
+      <details style="margin-top: 10px; font-size: 0.78rem; color: var(--text-secondary);">
+        <summary style="cursor: pointer; font-weight: 600; margin-bottom: 8px;">⚙️ Have your own Plaid Link Token? (Optional)</summary>
+        <div class="form-group">
+          <input type="text" class="form-input" id="customPlaidToken" placeholder="link-sandbox-xxxxxxxx or link-production-..." />
+          <div style="margin-top:4px; font-size:0.7rem;">If left blank, clicking Connect runs an interactive Capital One Plaid Sandbox sync so you can test the full flow immediately.</div>
+        </div>
+      </details>
+
+      <div id="plaidResultsArea" style="display:none; margin-top: 12px;">
+        <div class="form-label">Recurring Capital One Charges Found:</div>
+        <div id="plaidDetectedList"></div>
+        <button class="btn-primary" id="btnImportPlaid">Add Selected to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Snipe a Free Trial / Add Subscription -->
+  <div class="modal-backdrop" id="modalAdd">
+    <div class="modal-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title" id="modalAddTitle">🎯 Snipe a Free Trial</div>
+        <button class="btn-close" data-close="modalAdd">✕</button>
+      </div>
+
+      <form id="subForm">
+        <div class="form-group">
+          <label class="form-label">Service / App Name</label>
+          <input type="text" class="form-input" id="inputName" placeholder="e.g., Apple TV+, YouTube Premium, Audible" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Price (After Trial)</label>
+            <input type="number" step="0.01" class="form-input" id="inputPrice" placeholder="14.99" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Billing Cycle</label>
+            <select class="form-select" id="inputCycle">
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Billed Through</label>
+            <select class="form-select" id="inputSource">
+              <option value="apple">🍎 Apple App Store</option>
+              <option value="google">▶️ Google Play Store</option>
+              <option value="capone">💳 Capital One Card</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Next Charge / Trial End</label>
+            <input type="date" class="form-input" id="inputDate" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subscription Type</label>
+          <select class="form-select" id="inputIsTrial">
+            <option value="true">🎯 Free Trial (Activate 48h Sniper Alarm)</option>
+            <option value="false">🔄 Active Recurring Subscription</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary">Save & Activate Sniper</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Subscription Action / Cancel Sheet -->
+  <div class="modal-backdrop" id="modalDetail">
+    <div class="modal-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title" id="detailTitle">Subscription Details</div>
+        <button class="btn-close" data-close="modalDetail">✕</button>
+      </div>
+      <div id="detailBody"></div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
