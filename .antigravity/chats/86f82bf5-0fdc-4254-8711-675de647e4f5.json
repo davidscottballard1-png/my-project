@@ -268,6 +268,18 @@
       "created_at": "2026-11-07T21:18:43.225Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "07a02a01-a338-4d29-ac56-ea43625b5cbc",
+      "role": "user",
+      "content": "I attached an image: .antigravity/uploads/photo-1794086585-1.jpg.\n\nWas this us/you?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:23:08.215Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
