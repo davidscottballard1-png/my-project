@@ -364,6 +364,18 @@
       "created_at": "2026-11-07T21:36:50.516Z",
       "sender": "macOS",
       "is_cancelled": false
+    },
+    {
+      "id": "938efc93-73b4-41a6-b841-86f2d3b8eaa8",
+      "role": "user",
+      "content": "What if I don’t have a plaid developer account?",
+      "status": "pending",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": null,
+      "created_at": "2026-11-07T21:38:05.862Z",
+      "sender": "ios",
+      "is_cancelled": false
     }
   ]
 }
