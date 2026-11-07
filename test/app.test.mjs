@@ -83,6 +83,31 @@ test("4. Screenshot OCR parser handles multi-line iOS Settings layout & Free Tri
 
   assert.equal(parsed[2].cycle, "yearly");
   assert.equal(parsed[2].price, 79.99);
+
+  // Also test real iOS OCR artifacts from left-aligned app icons & One logo
+  const realIosOcr = `
+    0 AppleCare One
+    $25.98/month
+    one Premier
+    $39.95/month
+    ChatGPT
+    ®) Pro Monthly
+    $14.99/month
+  `;
+  const realParsed = app.parseSubscriptionText(realIosOcr, "apple", new Date(2026, 10, 7));
+  assert.equal(realParsed[0].name, "AppleCare One");
+  assert.equal(realParsed[1].name, "Apple One Premier");
+  assert.equal(realParsed[2].name, "ChatGPT");
+
+  // And test auto-sanitizing already-saved localStorage items
+  const repaired = app.sanitizeSubscriptionList([
+    { name: "0 AppleCare One", price: 25.98 },
+    { name: "one Premier", price: 39.95 },
+    { name: "®) Pro Monthly", price: 14.99 }
+  ]);
+  assert.equal(repaired[0].name, "AppleCare One");
+  assert.equal(repaired[1].name, "Apple One Premier");
+  assert.equal(repaired[2].name, "Pro Monthly");
 });
 
 test("5. Capital One CSV parser handles quoted commas and ignores payments", () => {
