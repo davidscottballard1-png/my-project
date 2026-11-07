@@ -316,7 +316,7 @@ function parseSubscriptionText(rawText, source = "apple", baseDate = new Date())
   const detected = [];
   // Matches $9.99, $ 14.99, USD 9.99, or 9.99/month
   const priceRegex = /(?:\$\s*|USD\s*)(\d{1,3}(?:\.\d{2}))|(\d{1,3}\.\d{2})\s*(?:\/|\s*per\s*)(?:mo|month|yr|year|wk|week)/i;
-  const ignoreNameWords = /^(renews|expires|active|subscriptions|your subscriptions|included|billing|payment|apple|google|capital one|monthly|annual|yearly|weekly|individual|family|student|plan|free trial|trial|see all|manage)$/i;
+  const ignoreNameWords = /^(renews.*|expires.*|active|subscriptions|your subscriptions|included|billing|payment|apple|google|capital one|monthly|annual|yearly|weekly|individual.*|family.*|student.*|annual plan|monthly plan|plan|free trial|trial|see all|manage)$/i;
 
   for (let i = 0; i < lines.length; i++) {
     const match = lines[i].match(priceRegex);
@@ -328,8 +328,8 @@ function parseSubscriptionText(rawText, source = "apple", baseDate = new Date())
     // Try extracting service name from current line first
     let nameCandidate = lines[i]
       .replace(priceRegex, "")
-      .replace(/\/(mo|month|yr|year|wk|week)/gi, "")
-      .replace(/\b(per\s+month|per\s+year|monthly|yearly|annual|free\s+trial|trial|renews.*|expires.*)\b/gi, "")
+      .replace(/\/(month|mo|year|yr|week|wk)\b/gi, "")
+      .replace(/\b(per\s+month|per\s+year|monthly|yearly|annual|free\s+trial|trial|renews.*|expires.*|individual\s+plan|family\s+plan|student\s+plan|annual\s+plan|monthly\s+plan)\b/gi, "")
       .replace(/[-•|:$()]/g, " ")
       .replace(/\s+/g, " ")
       .trim();
