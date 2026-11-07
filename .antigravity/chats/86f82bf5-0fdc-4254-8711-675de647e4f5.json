@@ -472,6 +472,18 @@
       "created_at": "2026-11-07T21:44:41.587Z",
       "sender": "ios",
       "is_cancelled": false
+    },
+    {
+      "id": "c9ed2c1b-b2d0-4540-bdfa-309702388501",
+      "role": "agent",
+      "content": "The stream was interrupted. Please continue the task you were working on.\nHaha—**don't worry, it didn't secretly read your accounts!**\n\nI pre-loaded 8 **educated-guess starter items** ([`DEFAULT_SUBSCRIPTIONS`](file:///home/agent/workspace/app.js#L13-L94) in [app.js](file:///home/agent/workspace/app.js)) based on what someone with an iPhone, iPad Pro, Google account, and gaming setup usually has:\n- **Apple Arcade** & **YouTube Premium** *(as sample Free Trials)*\n- **iCloud+ 2TB** & **ChatGPT Plus** *(under App Store)*\n- **Google One 2TB** *(under Google Play)*\n- **Netflix**, **Spotify**, & **Xbox Game Pass** *(under Capital One)*\n\nIt just happened to be a scary-good guess!\n\nYou can tap any item you *don't* actually have and hit **🗑️ Remove from SubSniper**, or tell me which ones to clear out and I can wipe the sample ones for you in one click.",
+      "status": "error",
+      "model": "gemini-4-argon-high",
+      "client_type": "gemini-bridge",
+      "parent_message_id": "826df2dd-1154-41ba-90c4-b4aa64b2af4c",
+      "created_at": "2026-11-07T21:44:54.456Z",
+      "sender": "macOS",
+      "is_cancelled": false
     }
   ]
 }
